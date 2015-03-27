@@ -1,3 +1,7 @@
+import java.util.Date;
+import java.text.ParseException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +23,8 @@ public class InsertPassengers extends HttpServlet{
 				"csc370p1",
 				"csc370p1");
 
-			String errorcode = request.getParameter("er");
+			String errorcode1 = request.getParameter("er1");
+			String errorcode2 = request.getParameter("er2");
 
 			String deletecode = request.getParameter("delete");
 			if(deletecode != null) {
@@ -39,15 +44,20 @@ public class InsertPassengers extends HttpServlet{
 						"<title>Insert Passenger</title>" +
 						"</head>" +
 						"<body><font size=\"4\">");
-			if(errorcode != null) {
+			if(errorcode1 != null) {
 				out.println("ERROR PID MUST BE INT");
 			}
+
+			if(errorcode2 != null){
+				out.println("ERROR INVALID DATE FORMAT");
+			}
+
 			out.println("Insert a Passenger:<br>" +
 						"<form method=\"POST\" action=\"/csc370p1/passengers\" >" +
 						"Passenger ID: <input type=\"text\" name=\"pid\" value=\"\" /> <br>" +
 						"Name: <input type=\"text\" name=\"name\" value=\"\" /> <br>" +
 						"Birthdate: <input type=\"text\" name=\"birthdate\" value=\"\" /> <br>" +
-						"Birthplace: <input type=\"text\" name=\"birtplace\" value=\"\" /> <br>" +
+						"Birthplace: <input type=\"text\" name=\"birthplace\" value=\"\" /> <br>" +
 						"Citizenship: <input type=\"text\" name=\"citizenship\" value=\"\" /> <br>" +
 						"<input type=\"submit\" value=\"Submit\" > <br>" +
 						"</form>" + 
@@ -106,23 +116,37 @@ public class InsertPassengers extends HttpServlet{
 			String birthplace = request.getParameter("birthplace");
 			String citizenship = request.getParameter("citizenship");
 
+			//Format Date
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			Date tempdate = null;
+
+			try{
+				tempdate = formatter.parse(birthdate);
+			} catch (ParseException e){
+				response.sendRedirect("/csc370p1/passengers?er2=true");
+				return;
+			}
+	
+			java.sql.Date birthdateval = new java.sql.Date(tempdate.getTime());
+
+
 			int pidval = 0;
 
 			try {
    				pidval = Integer.parseInt(pid);
 			} catch (NumberFormatException e) {
-    			response.sendRedirect("/csc370p1/passengers?er=true");
+    			response.sendRedirect("/csc370p1/passengers?er1=true");
 				return;
 			}
 
 
 			PreparedStatement insertPassengerStatement = conn.prepareStatement(
-						"INSERT INTO Passenger(pid, name, birthplace, birthdate, citizenship) " +
-						"VALUES( ?,?)");
+						"INSERT INTO Passenger(pid,name,birthdate,birthplace,citizenship) " +
+						"VALUES( ?,?,?,?,?)");
 			insertPassengerStatement.setInt(1,pidval);
 			insertPassengerStatement.setString(2,name);
-			insertPassengerStatement.setString(3,birthplace);
-			insertPassengerStatement.setString(4,birthdate);
+			insertPassengerStatement.setDate(3,birthdateval);
+			insertPassengerStatement.setString(4,birthplace);
 			insertPassengerStatement.setString(5,citizenship);
 			insertPassengerStatement.executeUpdate();
 			insertPassengerStatement.close();
