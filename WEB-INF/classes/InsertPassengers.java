@@ -27,9 +27,9 @@ public class InsertPassengers extends HttpServlet{
 				PreparedStatement deletePassengerStatement = conn.prepareStatement(
 						"DELETE FROM Passenger " +
 						"WHERE pid = ?");
-				deletePlaneStatement.setInt(1,deletecodeval);
-				deletePlaneStatement.executeUpdate();
-				deletePlaneStatement.close();
+				deletePassengerStatement.setInt(1,deletecodeval);
+				deletePassengerStatement.executeUpdate();
+				deletePassengerStatement.close();
 				response.sendRedirect("/csc370p1/passengers");
 
 			}
