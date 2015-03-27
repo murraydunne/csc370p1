@@ -107,9 +107,6 @@ public class InsertAirlines extends HttpServlet{
 			}
 
 
-				
-
-
 			PreparedStatement insertAirlineStatement = conn.prepareStatement(
 						"INSERT INTO Airline(code,name,website) " +
 						"VALUES( ?,?,?)");
