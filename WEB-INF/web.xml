@@ -36,6 +36,18 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 		<url-pattern>/airlines</url-pattern>
 	</servlet-mapping>
 
+	<!-- Flights Table-->
+	<servlet>
+		<servlet-name>Insert Flights</servlet-name>
+		<servlet-class>InsertFlights</servlet-class>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>Insert Flights</servlet-name>
+		<url-pattern>/flights</url-pattern>
+	</servlet-mapping>
+
+
 	<!-- Passenger Table-->
 	<servlet>
 		<servlet-name>Insert Passengers</servlet-name>
