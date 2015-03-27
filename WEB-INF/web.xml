@@ -114,5 +114,16 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 		<url-pattern>/departures</url-pattern>
 	</servlet-mapping>
 
+	<!-- Passenger Registration-->
+	<servlet>
+		<servlet-name>Passenger Registration</servlet-name>
+		<servlet-class>PassengerRegistration</servlet-class>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>Passenger Registration</servlet-name>
+		<url-pattern>/registrations</url-pattern>
+	</servlet-mapping>
+
 
 </web-app>
