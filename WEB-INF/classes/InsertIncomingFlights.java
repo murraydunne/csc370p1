@@ -31,7 +31,6 @@ public class InsertIncomingFlights extends HttpServlet{
 				deleteFlightStatement.executeUpdate();
 				deleteFlightStatement.close();
 				response.sendRedirect("/csc370p1/incomingflights");
-
 			}
 			
 			out.println("<html>" +
