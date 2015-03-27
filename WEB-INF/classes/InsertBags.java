@@ -44,16 +44,40 @@ public class InsertBags extends HttpServlet{
 			}
 			out.println("Insert a Bag:<br>" +
 						"<form method=\"POST\" action=\"/csc370p1/bags\" >" +
-						"Bag ID: <input type=\"text\" name=\"bid\" value=\"\" /> <br>" +
-						"Passenger ID: <input type=\"text\" name=\"pid\" value=\"\" /> <br>" +
-						"Flight Number: <input type=\"text\" name=\"fnum\" value=\"\" /> <br>" +
+						"Bag ID: <input type=\"text\" name=\"bid\" value=\"\" /> <br>"
+						);
+
+			out.println(
+						"Select a Passenger:" +
+						"<select name=\"pid\">");
+						Statement stmt = conn.createStatement();
+						ResultSet rset = stmt.executeQuery("SELECT * FROM Passenger");
+						while (rset.next()) {
+							out.print (
+							"<option value=\"" + rset.getString("pid") + "\">" + rset.getString("name") + "</option>");
+						}
+						stmt.close();
+
+
+			out.println("</select><br>" +
+						"Select a Flight:" +
+						"<select name=\"num\">");
+						stmt = conn.createStatement();
+						rset = stmt.executeQuery("SELECT * FROM Flight");
+						while (rset.next()) {
+							out.print (
+							"<option value=\"" + rset.getString("num") + "\">" + rset.getString("num") + "</option>");
+						}
+						stmt.close();
+
+			out.println("</select>" +
 						"<input type=\"submit\" value=\"Submit\" > <br>" +
 						"</form>" + 
 						"<hr>");
 
 
-			Statement stmt = conn.createStatement();
-			ResultSet rset = stmt.executeQuery(
+			stmt = conn.createStatement();
+			rset = stmt.executeQuery(
 					"SELECT * " +
 					"FROM Baggage");
 			out.println("<table border=\"1\"><tr>" +
