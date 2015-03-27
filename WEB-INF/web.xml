@@ -81,5 +81,16 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 		<url-pattern>/incomingflights</url-pattern>
 	</servlet-mapping>
 
+	<!-- Outgoing Flight Table-->
+	<servlet>
+		<servlet-name>Insert Outgoing Flights</servlet-name>
+		<servlet-class>InsertOutgoingFlights</servlet-class>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>Insert Outgoing Flights</servlet-name>
+		<url-pattern>/outgoingflights</url-pattern>
+	</servlet-mapping>
+
 
 </web-app>
