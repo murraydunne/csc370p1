@@ -14,13 +14,38 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
+	<!-- Planes Table -->
 	<servlet>
 		<servlet-name>Insert Planes</servlet-name>
 		<servlet-class>InsertPlanes</servlet-class>
 	</servlet>
- 
+
 	<servlet-mapping>
 		<servlet-name>Insert Planes</servlet-name>
 		<url-pattern>/planes</url-pattern>
 	</servlet-mapping>
+
+	<!-- Airlines Table-->
+	<servlet>
+		<servlet-name>Insert Airlines</servlet-name>
+		<servlet-class>InsertAirlines</servlet-class>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>Insert Airlines</servlet-name>
+		<url-pattern>/airlines</url-pattern>
+	</servlet-mapping>
+
+	<!-- Passenger Table-->
+	<servlet>
+		<servlet-name>Insert Passengers</servlet-name>
+		<servlet-class>InsertPassengers</servlet-class>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>Insert Passengers</servlet-name>
+		<url-pattern>/passengers</url-pattern>
+	</servlet-mapping>
+
+
 </web-app>
