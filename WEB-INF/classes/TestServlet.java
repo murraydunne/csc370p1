@@ -32,6 +32,7 @@ public class TestServlet extends HttpServlet{
 			out.println("<a href=\"/csc370p1/airlines\">Insert Airlines</a><br>");
 			out.println("<a href=\"/csc370p1/flights\">Insert Flights</a><br>");
 			out.println("<a href=\"/csc370p1/passengers\">Insert Passengers</a><br>");
+			out.println("<a href=\"/csc370p1/bags\">Insert Bags</a><br>");
 
 
 			out.println("</body>");

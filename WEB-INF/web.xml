@@ -59,5 +59,16 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 		<url-pattern>/passengers</url-pattern>
 	</servlet-mapping>
 
+	<!-- Baggage Table-->
+	<servlet>
+		<servlet-name>Insert Bags</servlet-name>
+		<servlet-class>InsertBags</servlet-class>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>Insert Bags</servlet-name>
+		<url-pattern>/bags</url-pattern>
+	</servlet-mapping>
+
 
 </web-app>
