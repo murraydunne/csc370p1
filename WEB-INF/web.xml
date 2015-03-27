@@ -92,5 +92,27 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 		<url-pattern>/outgoingflights</url-pattern>
 	</servlet-mapping>
 
+	<!-- Arrival Table-->
+	<servlet>
+		<servlet-name>Insert Arrivals</servlet-name>
+		<servlet-class>InsertArrivals</servlet-class>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>Insert Arrivals</servlet-name>
+		<url-pattern>/arrivals</url-pattern>
+	</servlet-mapping>
+
+	<!-- Departure Table-->
+	<servlet>
+		<servlet-name>Insert Departures</servlet-name>
+		<servlet-class>InsertDepartures</servlet-class>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>Insert Departures</servlet-name>
+		<url-pattern>/departures</url-pattern>
+	</servlet-mapping>
+
 
 </web-app>
