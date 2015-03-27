@@ -21,6 +21,8 @@ public class InsertFlights extends HttpServlet{
 
 			String errorcode1 = request.getParameter("er1");
 
+
+			//DELETE STUFF
 			String deletecode = request.getParameter("delete");
 			if(deletecode != null) {
 				int deletecodeval = Integer.parseInt(deletecode);
@@ -34,6 +36,8 @@ public class InsertFlights extends HttpServlet{
 
 			}
 			
+
+			//PAGE
 			out.println("<html>" +
 						"<head>" +
 						"<title>Insert Flight</title>" +
@@ -49,8 +53,31 @@ public class InsertFlights extends HttpServlet{
 						"Flight Number: <input type=\"text\" name=\"num\" value=\"\" /> <br>" +
 						"Source: <input type=\"text\" name=\"src\" value=\"\" /> <br>" +
 						"Destination: <input type=\"text\" name=\"destination\" value=\"\" /> <br>" +
-						"Airline Code: <input type=\"text\" name=\"acode\" value=\"\" /> <br>" +
-						"Plane Code: <input type=\"text\" name=\"pmcode\" value=\"\" /> <br>" +
+						"Airline Code: <select name=\"acode\">");
+						//airline code 
+			Statement acodestmt = conn.createStatement();
+			ResultSet acodes = acodestmt.executeQuery(
+						"SELECT * FROM Airline");
+			while (acodes.next()) {
+							out.println("<option value=\"" + acodes.getString("code") + "\">" + acodes.getString("name") + "</option>");
+			}
+						//plane model code
+			out.println("</select><br>Plane Model Code: <select name=\"pmcode\"");
+			Statement pmcodestmt = conn.createStatement();
+			ResultSet pmcodes = pmcodestmt.executeQuery(
+						"SELECT * FROM PlaneModel");
+			while (pmcodes.next()) {
+							out.println("<option value=\"" + pmcodes.getString("code") + "\">" + pmcodes.getString("code") + "</option>");
+			}
+			out.println("</select><br>" +
+						"Gate: <input type=\"text\" name=\"gate\" value=\"\" /> <br>" +
+						"Date: <input type=\"text\" name=\"date\" value=\"\" /> <br>" +
+						"Time: <input type=\"text\" name=\"time\" value=\"\" /> <br>" +
+						"Status: <input type=\"text\" name=\"status\" value=\"\" /> <br>" +
+						"Type: <select name = \"type\">" + 
+						"<option value=\"dep\">Departure</option>" +
+						"<option value=\"arr\">Arrival</option>" +
+						"</select><br>" +
 						"<input type=\"submit\" value=\"Submit\" > <br>" +
 						"</form>" + 
 						"<hr>");
@@ -107,6 +134,11 @@ public class InsertFlights extends HttpServlet{
 			String destination = request.getParameter("destination");
 			String acode = request.getParameter("acode");
 			String pmcode = request.getParameter("pmcode");
+			String gate = request.getParameter("gate");
+			String date = request.getParameter("date");
+			String time = request.getParameter("time");
+			String status = request.getParameter("status");
+			String type = request.getParameter("type");
 
 
 			int numval = 0;
@@ -133,7 +165,44 @@ public class InsertFlights extends HttpServlet{
 			insertFlightStatement.setInt(5,pmcodeval);
 			insertFlightStatement.executeUpdate();
 			insertFlightStatement.close();
-			
+
+			if(type.equals("dep")) {
+				PreparedStatement insertOutgoing = conn.prepareStatement(
+						"INSERT INTO OutgoingFlight(num,departs_at) " +
+						"VALUES( ?,?)");
+				insertOutgoing.setInt(1,numval);
+				insertOutgoing.setString(2,time);
+				insertOutgoing.executeUpdate();
+				insertOutgoing.close();
+
+				PreparedStatement insertDeparture = conn.prepareStatement(
+						"INSERT INTO Departure(gate,departing_date,status,fnum) " +
+						"VALUES( ?,?,?,?)");
+				insertDeparture.setString(1,gate);
+				insertDeparture.setString(2,date);
+				insertDeparture.setString(3,status);
+				insertDeparture.setInt(4,numval);
+				insertDeparture.executeUpdate();
+				insertDeparture.close();
+			} else {
+				PreparedStatement insertIncoming = conn.prepareStatement(
+						"INSERT INTO IncomingFlight(num,arrives_at) " +
+						"VALUES( ?,?)");
+				insertIncoming.setInt(1,numval);
+				insertIncoming.setString(2,time);
+				insertIncoming.executeUpdate();
+				insertIncoming.close();
+
+				PreparedStatement insertArrival = conn.prepareStatement(
+						"INSERT INTO Arrival(gate,arrival_date,status,fnum) " +
+						"VALUES( ?,?,?,?)");
+				insertArrival.setString(1,gate);
+				insertArrival.setString(2,date);
+				insertArrival.setString(3,status);
+				insertArrival.setInt(4,numval);
+				insertArrival.executeUpdate();
+				insertArrival.close();
+			}
 			response.sendRedirect("/csc370p1/flights");
 			
 

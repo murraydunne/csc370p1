@@ -18,8 +18,8 @@ CREATE TABLE Flight (
   acode INT NOT NULL,
   pmcode INT NOT NULL,
   PRIMARY KEY(num),
-  CONSTRAINT fk_flight_airline FOREIGN KEY (acode) REFERENCES Airline(code),
-  CONSTRAINT fk_flight_model FOREIGN KEY (pmcode) REFERENCES PlaneModel(code)
+  CONSTRAINT fk_flight_airline FOREIGN KEY (acode) REFERENCES Airline(code) ON DELETE CASCADE,
+  CONSTRAINT fk_flight_model FOREIGN KEY (pmcode) REFERENCES PlaneModel(code) ON DELETE CASCADE
 );
 
 CREATE TABLE Passenger (
@@ -36,87 +36,81 @@ CREATE TABLE Baggage (
   pid INT NOT NULL,
   fnum INT NOT NULL,
   PRIMARY KEY(bid),
-  CONSTRAINT fk_baggage_passenger FOREIGN KEY (pid) REFERENCES Passenger(pid),
-  CONSTRAINT fk_baggage_flight FOREIGN KEY (fnum) REFERENCES Flight(num)
+  CONSTRAINT fk_baggage_passenger FOREIGN KEY (pid) REFERENCES Passenger(pid) ON DELETE CASCADE,
+  CONSTRAINT fk_baggage_flight FOREIGN KEY (fnum) REFERENCES Flight(num) ON DELETE CASCADE
 );
 
 CREATE TABLE IncomingFlight (
   num INT NOT NULL,
   arrives_at INTERVAL DAY(0) TO SECOND(0),
-  arrivalid INT NOT NULL,
   PRIMARY KEY(num),
-  CONSTRAINT inc_is_a_flight FOREIGN KEY (num) REFERENCES Flight(num)
+  CONSTRAINT inc_is_a_flight FOREIGN KEY (num) REFERENCES Flight(num) ON DELETE CASCADE
 );
 
 CREATE TABLE OutgoingFlight (
   num INT NOT NULL,
   departs_at INTERVAL DAY(0) TO SECOND(0),
-  departureid INT NOT NULL,
   PRIMARY KEY(num),
-  CONSTRAINT out_is_a_flight FOREIGN KEY (num) REFERENCES Flight(num)
+  CONSTRAINT out_is_a_flight FOREIGN KEY (num) REFERENCES Flight(num) ON DELETE CASCADE
 );
 
 CREATE TABLE Arrival (
-  id INT NOT NULL,
+  fnum INT NOT NULL,
   gate CHAR(3) NOT NULL,
   arrival_date DATE NOT NULL,
   status VARCHAR(100),
-  fnum INT NOT NULL,
-  PRIMARY KEY(id),
-  CONSTRAINT fk_arrives_flight FOREIGN KEY (fnum) REFERENCES Flight(num)
+  PRIMARY KEY(fnum),
+  CONSTRAINT fk_arrives_flight FOREIGN KEY (fnum) REFERENCES Flight(num) ON DELETE CASCADE
 );
-ALTER TABLE IncomingFlight ADD CONSTRAINT fk_inc_has_arrival FOREIGN KEY (arrivalid) REFERENCES Arrival(id);
 
 CREATE TABLE Departure (
-  id INT NOT NULL,
+  fnum INT NOT NULL,
   gate CHAR(3) NOT NULL,
   departing_date DATE NOT NULL,
   status VARCHAR(100),
-  fnum INT NOT NULL,
-  PRIMARY KEY(id),
-  CONSTRAINT fk_departs_flight FOREIGN KEY (fnum) REFERENCES Flight(num)
+  PRIMARY KEY(fnum),
+  CONSTRAINT fk_departs_flight FOREIGN KEY (fnum) REFERENCES Flight(num) ON DELETE CASCADE
 );
-ALTER TABLE OutgoingFlight ADD CONSTRAINT fk_out_has_departure FOREIGN KEY (departureid) REFERENCES Departure(id);
 
 CREATE TABLE ArrivesOn (
   pid INT NOT NULL,
-  arrivalid INT NOT NULL,
-  CONSTRAINT fk_a_is_passenger FOREIGN KEY (pid) REFERENCES Passenger(pid),
-  CONSTRAINT fk_arrives_on FOREIGN KEY (arrivalid) REFERENCES Arrival(id)
+  fnum INT NOT NULL,
+  CONSTRAINT fk_a_is_passenger FOREIGN KEY (pid) REFERENCES Passenger(pid) ON DELETE CASCADE,
+  CONSTRAINT fk_arrives_on FOREIGN KEY (fnum) REFERENCES Arrival(fnum) ON DELETE CASCADE
 );
 
 CREATE TABLE DepartsOn (
   pid INT NOT NULL,
-  departureid INT NOT NULL,
-  CONSTRAINT fk_d_is_passenger FOREIGN KEY (pid) REFERENCES Passenger(pid),
-  CONSTRAINT fk_departs_on FOREIGN KEY (departureid) REFERENCES Departure(id)
+  fnum INT NOT NULL,
+  CONSTRAINT fk_d_is_passenger FOREIGN KEY (pid) REFERENCES Passenger(pid) ON DELETE CASCADE,
+  CONSTRAINT fk_departs_on FOREIGN KEY (fnum) REFERENCES Departure(fnum) ON DELETE CASCADE
 );
 
 CREATE TABLE EconomyClass (
   pid INT NOT NULL,
   PRIMARY KEY(pid),
-  CONSTRAINT fk_eco_is_passenger FOREIGN KEY (pid) REFERENCES Passenger(pid)
+  CONSTRAINT fk_eco_is_passenger FOREIGN KEY (pid) REFERENCES Passenger(pid) ON DELETE CASCADE
 );
 
 CREATE TABLE FirstClass (
   pid INT NOT NULL,
   shaken_not_stirred CHAR(1),
   PRIMARY KEY(pid),
-  CONSTRAINT fk_first_is_passenger FOREIGN KEY (pid) REFERENCES Passenger(pid)
+  CONSTRAINT fk_first_is_passenger FOREIGN KEY (pid) REFERENCES Passenger(pid) ON DELETE CASCADE
 );
 
 CREATE TABLE SpecialNeeds (
   pid INT NOT NULL,
   condition VARCHAR(100) NOT NULL,
   PRIMARY KEY(pid),
-  CONSTRAINT fk_spec_is_passenger FOREIGN KEY (pid) REFERENCES Passenger(pid)
+  CONSTRAINT fk_spec_is_passenger FOREIGN KEY (pid) REFERENCES Passenger(pid) ON DELETE CASCADE
 );
 
 CREATE TABLE Infant (
   pid INT NOT NULL,
   months_old INT NOT NULL,
   PRIMARY KEY(pid),
-  CONSTRAINT fk_inf_is_passenger FOREIGN KEY (pid) REFERENCES Passenger(pid)
+  CONSTRAINT fk_inf_is_passenger FOREIGN KEY (pid) REFERENCES Passenger(pid) ON DELETE CASCADE
 );
 
 DROP TABLE Infant;

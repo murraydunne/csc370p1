@@ -1,0 +1,151 @@
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.sql.*;
+ 
+public class InsertPassengers extends HttpServlet{
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+	throws IOException {
+		PrintWriter out = response.getWriter();
+
+		try {
+			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+			
+			Connection conn = DriverManager.getConnection(
+				"jdbc:oracle:thin:@csc370p1.cii93vwsfsde.us-east-1.rds.amazonaws.com:1521:ORCL",
+				"csc370p1",
+				"csc370p1");
+
+			String errorcode = request.getParameter("er");
+
+			String deletecode = request.getParameter("delete");
+			if(deletecode != null) {
+				int deletecodeval = Integer.parseInt(deletecode);
+				PreparedStatement deletePassStatement = conn.prepareStatement(
+						"DELETE FROM Passenger " +
+						"WHERE pid = ?");
+				deletePassStatement.setInt(1,deletecodeval);
+				deletePassStatement.executeUpdate();
+				deletePassStatement.close();
+				response.sendRedirect("/csc370p1/passengers");
+
+			}
+			
+			out.println("<html>" +
+						"<head>" +
+						"<title>Insert Passenger</title>" +
+						"</head>" +
+						"<body><font size=\"4\">");
+			if(errorcode.equals("pid")) {
+				out.println("ERROR: PID MUST BE AN INT <br>");
+			}
+			if(errorcode.equals("date")) {
+				out.println("ERROR: DATE MUST BE IN \"YYYY-MM-DD\"<br>");
+			}
+
+			out.println("Insert a Passenger:<br>" +
+						"<form method=\"POST\" action=\"/csc370p1/passengers\" >" +
+						"Passenger ID: <input type=\"text\" name=\"code\" value=\"\" /> <br>" +
+						"Name: <input type=\"text\" name=\"name\" value=\"\" /> <br>" +
+						"Birthdate: <input type=\"text\" name=\"date\" value=\"\" /> <br>" +
+						"Birthplace: <input type=\"text\" name=\"place\" value=\"\" /> <br>" +
+						"Citizenship: <input type=\"text\" name=\"cit\" value=\"\" /> <br>" +
+						"<input type=\"submit\" value=\"Submit\" > <br>" +
+						"</form>" + 
+						"<hr>");
+
+
+			Statement stmt = conn.createStatement();
+			ResultSet rset = stmt.executeQuery(
+					"SELECT * " +
+					"FROM Passenger");
+			out.println("<table border=\"1\"><tr>" +
+  						"<th>PID</th>" +
+    					"<th>Name</th>" +
+    					"<th>Birthdate</th>" +
+    					"<th>Birthplace</th>" +
+    					"<th>Citizenship</th>" +
+   	 					"<th>Delete?</th>" +
+  						"</tr>");
+
+			while (rset.next()) {
+				out.println("<tr>");
+				out.print (
+					"<td>"+rset.getString("pid")+"</td>" +
+					"<td>"+rset.getString("name")+"</td>" +
+					"<td>"+rset.getString("birthdate")+"</td>" +
+					"<td>"+rset.getString("birthplace")+"</td>" +
+					"<td>"+rset.getString("citizenship")+"</td>" +
+					"<td>" + "<a href=\"/csc370p1/passengers?delete="+rset.getString("pid")+"\">X</a>" + "</td>");
+				out.println("</tr>");
+			}
+			out.println("</table>");
+			stmt.close();
+			out.println("<a href=\"/csc370p1\">Back</a>");
+
+			out.println("</body>" + "</html>");
+		} catch(SQLException ex) {
+			out.println("<h2>Exception: " + ex.getMessage() + "</h2>");
+		}
+	}
+
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+	throws IOException {
+		PrintWriter out = response.getWriter();
+
+		try {
+			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+			
+			Connection conn = DriverManager.getConnection(
+				"jdbc:oracle:thin:@csc370p1.cii93vwsfsde.us-east-1.rds.amazonaws.com:1521:ORCL",
+				"csc370p1",
+				"csc370p1");
+			String pid = request.getParameter("pid");
+			String name = request.getParameter("name");
+			String date = request.getParameter("birthdate");
+			String place = request.getParameter("birthplace");
+			String cit = request.getParameter("citizenship");
+			int pidval = 0;
+			Date dateval = null;
+			try {
+   				pidval = Integer.parseInt(pid);
+			} catch (NumberFormatException e) {
+    			response.sendRedirect("/csc370p1/passengers?er=pid");
+				return;
+			}
+			try {
+   				datebal = valueOf(date);
+			} catch (Exception e) {
+    			response.sendRedirect("/csc370p1/passengers?er=date");
+				return;
+			}
+
+
+			PreparedStatement insertPassStatement = conn.prepareStatement(
+						"INSERT INTO Passenger(pid,name,birthdate,birthplace,citizenship) " +
+						"VALUES( ?,?,?,?,?)");
+			insertPassStatement.setInt(1,pidval);
+			insertPassStatement.setString(2,name);
+			insertPassStatement.setDate(3,dateval);
+			insertPassStatement.setString(4,place);
+			insertPassStatement.setString(5,cit);
+			insertPassStatement.executeUpdate();
+			insertPassStatement.close();
+
+
+
+
+			
+			response.sendRedirect("/csc370p1/passengers");
+			
+
+			
+		} catch(SQLException ex) {
+			out.println("<h2>Exception: " + ex.getMessage() + "</h2>");
+		}
+	}
+}
