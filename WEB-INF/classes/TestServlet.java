@@ -28,6 +28,7 @@ public class TestServlet extends HttpServlet{
 			} else {
 				out.println("<h2>RIP</h2>");
 			}
+			out.println("<a href=\"/csc370p1/planes\">Insert Planes</a>");
 
 			out.println("</body>");
 			out.println("</html>");	

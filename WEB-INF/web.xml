@@ -13,4 +13,14 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 		<servlet-name>CSC 370 Project</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Insert Planes</servlet-name>
+		<servlet-class>InsertPlanes</servlet-class>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>Insert Planes</servlet-name>
+		<url-pattern>/planes</url-pattern>
+	</servlet-mapping>
 </web-app>
