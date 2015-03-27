@@ -59,6 +59,13 @@ public class InsertPassengers extends HttpServlet{
 						"Birthdate: <input type=\"text\" name=\"birthdate\" value=\"\" /> <br>" +
 						"Birthplace: <input type=\"text\" name=\"birthplace\" value=\"\" /> <br>" +
 						"Citizenship: <input type=\"text\" name=\"citizenship\" value=\"\" /> <br>" +
+						"Select Class:" +
+						"<select name= \"class\">" +
+					 		"<option value=\"eco\">Economy Class</option>" +
+						    "<option value=\"first\">First Class</option>" +
+						    "<option value=\"spec\">Special Needs</option>" +
+						    "<option value=\"inf\">Infant</option>" +
+						 "</select>" +
 						"<input type=\"submit\" value=\"Submit\" > <br>" +
 						"</form>" + 
 						"<hr>");
