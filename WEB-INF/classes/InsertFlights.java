@@ -1,3 +1,7 @@
+import java.util.Date;
+import java.text.ParseException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServlet;
@@ -20,6 +24,7 @@ public class InsertFlights extends HttpServlet{
 				"csc370p1");
 
 			String errorcode1 = request.getParameter("er1");
+			String errorcode2 = request.getParameter("er2");
 
 
 			//DELETE STUFF
@@ -45,6 +50,10 @@ public class InsertFlights extends HttpServlet{
 						"<body><font size=\"4\">");
 			if(errorcode1 != null) {
 				out.println("ERROR NUM, ACODE, AND PMCODE MUST BE INTS");
+			}
+
+			if(errorcode2 != null){
+				out.println("ERROR INVALID DATE FORMAT");
 			}
 
 
@@ -140,6 +149,18 @@ public class InsertFlights extends HttpServlet{
 			String status = request.getParameter("status");
 			String type = request.getParameter("type");
 
+			//Format Date
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			Date tempdate = null;
+
+			try{
+				tempdate = formatter.parse(date);
+			} catch (ParseException e){
+				response.sendRedirect("/csc370p1/passengers?er2=true");
+				return;
+			}
+			java.sql.Date dateval = new java.sql.Date(tempdate.getTime());
+
 
 			int numval = 0;
 			int acodeval = 0;
@@ -179,7 +200,7 @@ public class InsertFlights extends HttpServlet{
 						"INSERT INTO Departure(gate,departing_date,status,fnum) " +
 						"VALUES( ?,?,?,?)");
 				insertDeparture.setString(1,gate);
-				insertDeparture.setString(2,date);
+				insertDeparture.setDate(2,dateval);
 				insertDeparture.setString(3,status);
 				insertDeparture.setInt(4,numval);
 				insertDeparture.executeUpdate();
@@ -197,7 +218,7 @@ public class InsertFlights extends HttpServlet{
 						"INSERT INTO Arrival(gate,arrival_date,status,fnum) " +
 						"VALUES( ?,?,?,?)");
 				insertArrival.setString(1,gate);
-				insertArrival.setString(2,date);
+				insertArrival.setDate(2,dateval);
 				insertArrival.setString(3,status);
 				insertArrival.setInt(4,numval);
 				insertArrival.executeUpdate();
