@@ -70,5 +70,16 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 		<url-pattern>/bags</url-pattern>
 	</servlet-mapping>
 
+	<!-- Incoming Flight Table-->
+	<servlet>
+		<servlet-name>Insert Incoming Flights</servlet-name>
+		<servlet-class>InsertIncomingFlights</servlet-class>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>Insert Incoming Flights</servlet-name>
+		<url-pattern>/incomingflights</url-pattern>
+	</servlet-mapping>
+
 
 </web-app>
