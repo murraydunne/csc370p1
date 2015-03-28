@@ -150,11 +150,12 @@ public class InsertFlights extends HttpServlet{
 			String type = request.getParameter("type");
 
 			//Format Date
-			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			String fdate = date + "-" + time;
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-H-m");
 			Date tempdate = null;
 
 			try{
-				tempdate = formatter.parse(date);
+				tempdate = formatter.parse(fdate);
 			} catch (ParseException e){
 				response.sendRedirect("/csc370p1/passengers?er2=true");
 				return;
@@ -192,7 +193,7 @@ public class InsertFlights extends HttpServlet{
 						"INSERT INTO OutgoingFlight(num,departs_at) " +
 						"VALUES( ?,?)");
 				insertOutgoing.setInt(1,numval);
-				insertOutgoing.setString(2,time);
+				insertOutgoing.setDate(2,dateval);
 				insertOutgoing.executeUpdate();
 				insertOutgoing.close();
 
@@ -210,7 +211,7 @@ public class InsertFlights extends HttpServlet{
 						"INSERT INTO IncomingFlight(num,arrives_at) " +
 						"VALUES( ?,?)");
 				insertIncoming.setInt(1,numval);
-				insertIncoming.setString(2,time);
+				insertIncoming.setDate(2,dateval);
 				insertIncoming.executeUpdate();
 				insertIncoming.close();
 
