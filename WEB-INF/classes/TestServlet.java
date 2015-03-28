@@ -28,16 +28,22 @@ public class TestServlet extends HttpServlet{
 			} else {
 				out.println("<h2>RIP</h2>");
 			}
+
+			out.println("<b>Part 3:</b><br>")
 			out.println("<a href=\"/csc370p1/planes\">Insert Planes</a><br>");
 			out.println("<a href=\"/csc370p1/airlines\">Insert Airlines</a><br>");
 			out.println("<a href=\"/csc370p1/flights\">Insert Flights</a><br>");
 			out.println("<a href=\"/csc370p1/passengers\">Insert Passengers</a><br>");
 			out.println("<a href=\"/csc370p1/bags\">Insert Bags</a><br>");
-			out.println("<a href=\"/csc370p1/incomingflights\">Insert Incoming Flights</a><br>");
-			out.println("<a href=\"/csc370p1/outgoingflights\">Insert Outgoing Flights</a><br>");
-			out.println("<a href=\"/csc370p1/arrivals\">Insert Arrivals</a><br>");
-			out.println("<a href=\"/csc370p1/departures\">Insert Departures</a><br>");
+			//out.println("<a href=\"/csc370p1/incomingflights\">Insert Incoming Flights</a><br>");
+			//out.println("<a href=\"/csc370p1/outgoingflights\">Insert Outgoing Flights</a><br>");
+			//out.println("<a href=\"/csc370p1/arrivals\">Insert Arrivals</a><br>");
+			//out.println("<a href=\"/csc370p1/departures\">Insert Departures</a><br>");
 			out.println("<a href=\"/csc370p1/registrations\">Passenger Registration</a><br>");
+
+			out.println("<b>Part 4:</b><br>")
+			out.println("<a href=\"/csc370p1/flightstofrom\">Find Flights</a><br>");
+
 
 
 			out.println("</body>");
