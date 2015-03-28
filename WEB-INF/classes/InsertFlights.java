@@ -94,16 +94,29 @@ public class InsertFlights extends HttpServlet{
 
 			Statement stmt = conn.createStatement();
 			ResultSet rset = stmt.executeQuery(
-					"SELECT * " +
-					"FROM Flight");
+					"SELECT f.*, " +
+                                        "a.gate AS agate, " +
+                                        "a.arrival_date AS adate, " +
+                                        "a.status AS astatus, " +
+                                        "d.gate AS dgate, " +
+                                        "d.departing_date AS ddate, " +
+                                        "d.status AS dstatus " +
+					"FROM Flight f " +
+                                        "LEFT JOIN Arrival a ON a.fnum = f.num " +
+                                        "LEFT JOIN Departure d ON d.fnum = f.num");
 			out.println("<table border=\"1\"><tr>" +
-  						"<th>num</th>" +
+                                        "<th>num</th>" +
     					"<th>src</th>" +
     					"<th>destination</th>" +
     					"<th>acode</th>" +
     					"<th>pmcode</th>" +
-   	 					"<th>Delete?</th>" +
-  						"</tr>");
+                                        "<th>Arriving/Departing</th>" +
+                                        "<th>Arr/Dep Gate</th>" +
+                                        "<th>Arr/Dep Date</th>" +
+                                        "<th>Inc/Out Time</th>" +
+                                        "<th>Arr/Dep Status</th>" +
+   	 				"<th>Delete?</th>" +
+  					"</tr>");
 
 			while (rset.next()) {
 				out.println("<tr>");
@@ -113,6 +126,11 @@ public class InsertFlights extends HttpServlet{
 					"<td>"+rset.getString("destination")+"</td>" +
 					"<td>"+rset.getString("acode")+"</td>" +
 					"<td>"+rset.getString("pmcode")+"</td>" +
+                                        "<td>"+ (rset.getString("agate") == null ? "Departing" : "Arriving") +"</td>" +
+                                        "<td>"+ (rset.getString("agate") == null ? rset.getString("dgate") : rset.getString("agate")) +"</td>" +
+                                        "<td>"+ (rset.getString("adate") == null ? rset.getString("ddate") : rset.getString("adate")).substring(0, 10) +"</td>" +
+                                        "<td>"+ (rset.getString("adate") == null ? rset.getString("ddate") : rset.getString("adate")).substring(10) +"</td>" +
+                                        "<td>"+ (rset.getString("astatus") == null ? rset.getString("dstatus") : rset.getString("astatus")) +"</td>" +
 					"<td>" + "<a href=\"/csc370p1/flights?delete="+rset.getString("num")+"\">X</a>" + "</td>");
 				out.println("</tr>");
 			}
@@ -150,17 +168,16 @@ public class InsertFlights extends HttpServlet{
 			String type = request.getParameter("type");
 
 			//Format Date
-			String fdate = date + "-" + time;
-			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-H-m");
+			String fdate = date + " " + time;
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd H:m");
 			Date tempdate = null;
 
 			try{
 				tempdate = formatter.parse(fdate);
 			} catch (ParseException e){
-				response.sendRedirect("/csc370p1/passengers?er2=true");
+				response.sendRedirect("/csc370p1/flights?er2=true");
 				return;
 			}
-			java.sql.Date dateval = new java.sql.Date(tempdate.getTime());
 
 
 			int numval = 0;
@@ -191,17 +208,17 @@ public class InsertFlights extends HttpServlet{
 			if(type.equals("dep")) {
 				PreparedStatement insertOutgoing = conn.prepareStatement(
 						"INSERT INTO OutgoingFlight(num,departs_at) " +
-						"VALUES( ?,?)");
+						"VALUES( ?,TO_DATE(?, 'YYYY-MM-DD HH24:MI'))");
 				insertOutgoing.setInt(1,numval);
-				insertOutgoing.setDate(2,dateval);
+				insertOutgoing.setString(2,fdate);
 				insertOutgoing.executeUpdate();
 				insertOutgoing.close();
 
 				PreparedStatement insertDeparture = conn.prepareStatement(
 						"INSERT INTO Departure(gate,departing_date,status,fnum) " +
-						"VALUES( ?,?,?,?)");
+						"VALUES( ?,TO_DATE(?, 'YYYY-MM-DD HH24:MI'),?,?)");
 				insertDeparture.setString(1,gate);
-				insertDeparture.setDate(2,dateval);
+				insertDeparture.setString(2,fdate);
 				insertDeparture.setString(3,status);
 				insertDeparture.setInt(4,numval);
 				insertDeparture.executeUpdate();
@@ -209,17 +226,17 @@ public class InsertFlights extends HttpServlet{
 			} else {
 				PreparedStatement insertIncoming = conn.prepareStatement(
 						"INSERT INTO IncomingFlight(num,arrives_at) " +
-						"VALUES( ?,?)");
+						"VALUES( ?,TO_DATE(?, 'YYYY-MM-DD HH24:MI'))");
 				insertIncoming.setInt(1,numval);
-				insertIncoming.setDate(2,dateval);
+				insertIncoming.setString(2,fdate);
 				insertIncoming.executeUpdate();
 				insertIncoming.close();
 
 				PreparedStatement insertArrival = conn.prepareStatement(
 						"INSERT INTO Arrival(gate,arrival_date,status,fnum) " +
-						"VALUES( ?,?,?,?)");
+						"VALUES( ?,TO_DATE(?, 'YYYY-MM-DD HH24:MI'),?,?)");
 				insertArrival.setString(1,gate);
-				insertArrival.setDate(2,dateval);
+				insertArrival.setString(2,fdate);
 				insertArrival.setString(3,status);
 				insertArrival.setInt(4,numval);
 				insertArrival.executeUpdate();
