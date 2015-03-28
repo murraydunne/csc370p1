@@ -137,4 +137,15 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	</servlet-mapping>
 
 
+	<!-- From/To Flights Given Location-->
+	<servlet>
+		<servlet-name>FlightsToFrom</servlet-name>
+		<servlet-class>FlightsToFrom</servlet-class>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>FlightsToFrom</servlet-name>
+		<url-pattern>/flightstofrom</url-pattern>
+	</servlet-mapping>
+
 </web-app>

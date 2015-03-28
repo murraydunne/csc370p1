@@ -42,14 +42,14 @@ CREATE TABLE Baggage (
 
 CREATE TABLE IncomingFlight (
   num INT NOT NULL,
-  arrives_at DATE,
+  arrives_at DATE NOT NULL,
   PRIMARY KEY(num),
   CONSTRAINT inc_is_a_flight FOREIGN KEY (num) REFERENCES Flight(num) ON DELETE CASCADE
 );
 
 CREATE TABLE OutgoingFlight (
   num INT NOT NULL,
-  departs_at DATE,
+  departs_at DATE NOT NULL,
   PRIMARY KEY(num),
   CONSTRAINT out_is_a_flight FOREIGN KEY (num) REFERENCES Flight(num) ON DELETE CASCADE
 );

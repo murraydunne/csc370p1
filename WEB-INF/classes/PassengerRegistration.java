@@ -23,16 +23,24 @@ public class PassengerRegistration extends HttpServlet{
 				"csc370p1",
 				"csc370p1");
 
-			String errorcode1 = request.getParameter("er1");
-			String errorcode2 = request.getParameter("er2");
 
-			String deletecode = request.getParameter("delete");
-			if(deletecode != null) {
-				int deletecodeval = Integer.parseInt(deletecode);
+			String deletepid = request.getParameter("delpid");
+			String deletefnum = request.getParameter("delfnum");
+			if(deletepid != null) {
+				int deletepidval = Integer.parseInt(deletepid);
+				int deletefnumval = Integer.parseInt(deletefnum);
 				PreparedStatement deletePassengerStatement = conn.prepareStatement(
-						"DELETE FROM Passenger " +
-						"WHERE pid = ?");
-				deletePassengerStatement.setInt(1,deletecodeval);
+						"DELETE FROM ArrivesOn " +
+						"WHERE (pid = ?) AND (fnum = ?)");
+				deletePassengerStatement.setInt(1,deletepidval);
+				deletePassengerStatement.setInt(2,deletefnumval);
+				deletePassengerStatement.executeUpdate();
+				deletePassengerStatement.close();
+				deletePassengerStatement = conn.prepareStatement(
+						"DELETE FROM DepartsOn " +
+						"WHERE (pid = ?) AND (fnum = ?)");
+				deletePassengerStatement.setInt(1,deletepidval);
+				deletePassengerStatement.setInt(2,deletefnumval);
 				deletePassengerStatement.executeUpdate();
 				deletePassengerStatement.close();
 				response.sendRedirect("/csc370p1/registrations");
@@ -44,15 +52,8 @@ public class PassengerRegistration extends HttpServlet{
 						"<title>Insert Passenger</title>" +
 						"</head>" +
 						"<body><font size=\"4\">");
-			if(errorcode1 != null) {
-				out.println("ERROR PID MUST BE INT");
-			}
-
-			if(errorcode2 != null){
-				out.println("ERROR INVALID DATE FORMAT");
-			}
-
 			out.println(
+						"<form method=\"POST\" action=\"/csc370p1/registrations\" >" +
 						"Select a Passenger:" +
 						"<select name=\"pid\">");
 						Statement stmt = conn.createStatement();
@@ -66,7 +67,7 @@ public class PassengerRegistration extends HttpServlet{
 			out.println(
 						"</select><br>" +
 						"Select a Flight:" +
-						"<select name=\"num\">");
+						"<select name=\"fnum\">");
 						stmt = conn.createStatement();
 						rset = stmt.executeQuery("SELECT * FROM Flight");
 						while (rset.next()) {
@@ -85,25 +86,35 @@ public class PassengerRegistration extends HttpServlet{
 			stmt = conn.createStatement();
 			rset = stmt.executeQuery(
 					"SELECT * " +
-					"FROM Passenger");
-			out.println("<table border=\"1\"><tr>" +
+					"FROM ArrivesOn");
+			out.println("Incoming Flights<br><table border=\"1\"><tr>" +
   						"<th>Pid</th>" +
-    					"<th>Name</th>" +
-    					"<th>Birthdate</th>" +
-    					"<th>Birthplace</th>" +
-    					"<th>Citizenship</th>" +
-   	 					"<th>Delete?</th>" +
+    					"<th>Fid</th>" +
+    					"<th>Delete?</th>" +
   						"</tr>");
 
 			while (rset.next()) {
 				out.println("<tr>");
 				out.print (
 					"<td>"+rset.getString("pid")+"</td>" +
-					"<td>"+rset.getString("name")+"</td>" +
-					"<td>"+rset.getString("birthdate")+"</td>" +
-					"<td>"+rset.getString("birthplace")+"</td>" +
-					"<td>"+rset.getString("citizenship")+"</td>" +
-					"<td>" + "<a href=\"/csc370p1/registrations?delete="+rset.getString("pid")+"\">X</a>" + "</td>");
+					"<td>"+rset.getString("fnum")+"</td>" +
+					"<td>" + "<a href=\"/csc370p1/registrations?delpid="+rset.getString("pid")+"&delfnum="+rset.getString("fnum")+"\">X</a>" + "</td>");
+				out.println("</tr>");
+			}
+			rset = stmt.executeQuery(
+					"SELECT * " +
+					"FROM DepartsOn");
+			out.println("</table><br>Outgoing Flights<table border=\"1\"><tr>" +
+  						"<th>Pid</th>" +
+    					"<th>Fid</th>" +
+    					"<th>Delete?</th>" +
+  						"</tr>");
+			while (rset.next()) {
+				out.println("<tr>");
+				out.print (
+					"<td>"+rset.getString("pid")+"</td>" +
+					"<td>"+rset.getString("fnum")+"</td>" +
+					"<td>" + "<a href=\"/csc370p1/registrations?delpid="+rset.getString("pid")+"&delfnum="+rset.getString("fnum")+"\">X</a>" + "</td>");
 				out.println("</tr>");
 			}
 			out.println("</table>");
@@ -148,7 +159,7 @@ public class PassengerRegistration extends HttpServlet{
 
 			if(results.next()) {
 				PreparedStatement insertPassengerStatement = conn.prepareStatement(
-						"INSERT INTO ArrivesOn(pid,arrivalid) " +
+						"INSERT INTO ArrivesOn(pid,fnum) " +
 						"VALUES( ?,?)");
 				insertPassengerStatement.setInt(1,pidval);
 				insertPassengerStatement.setInt(2,fnumval);
@@ -157,7 +168,7 @@ public class PassengerRegistration extends HttpServlet{
 
 			} else {
 				PreparedStatement insertPassengerStatement = conn.prepareStatement(
-						"INSERT INTO DepartsOn(pid,departureid) " +
+						"INSERT INTO DepartsOn(pid,fnum) " +
 						"VALUES( ?,?)");
 				insertPassengerStatement.setInt(1,pidval);
 				insertPassengerStatement.setInt(2,fnumval);
