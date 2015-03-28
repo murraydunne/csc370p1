@@ -50,25 +50,25 @@ public class InsertBags extends HttpServlet{
 			out.println(
 						"Select a Passenger:" +
 						"<select name=\"pid\">");
-						Statement stmt = conn.createStatement();
-						ResultSet rset = stmt.executeQuery("SELECT * FROM Passenger");
-						while (rset.next()) {
+						Statement pstmt = conn.createStatement();
+						ResultSet prset = pstmt.executeQuery("SELECT * FROM Passenger");
+						while (prset.next()) {
 							out.print (
-							"<option value=\"" + rset.getString("pid") + "\">" + rset.getString("name") + "</option>");
+							"<option value=\"" + prset.getString("pid") + "\">" + prset.getString("name") + "</option>");
 						}
-						stmt.close();
+						pstmt.close();
 
 
 			out.println("</select><br>" +
 						"Select a Flight:" +
-						"<select name=\"num\">");
-						stmt = conn.createStatement();
-						rset = stmt.executeQuery("SELECT * FROM Flight");
-						while (rset.next()) {
+						"<select name=\"fnum\">");
+						Statement fstmt = conn.createStatement();
+						ResultSet frset = fstmt.executeQuery("SELECT * FROM Flight");
+						while (frset.next()) {
 							out.print (
-							"<option value=\"" + rset.getString("num") + "\">" + rset.getString("num") + "</option>");
+							"<option value=\"" + frset.getString("num") + "\">" + frset.getString("num") + "</option>");
 						}
-						stmt.close();
+						fstmt.close();
 
 			out.println("</select>" +
 						"<input type=\"submit\" value=\"Submit\" > <br>" +
@@ -76,8 +76,8 @@ public class InsertBags extends HttpServlet{
 						"<hr>");
 
 
-			stmt = conn.createStatement();
-			rset = stmt.executeQuery(
+			Statement stmt = conn.createStatement();
+			ResultSet rset = stmt.executeQuery(
 					"SELECT * " +
 					"FROM Baggage");
 			out.println("<table border=\"1\"><tr>" +
