@@ -29,7 +29,7 @@ public class TestServlet extends HttpServlet{
 				out.println("<h2>RIP</h2>");
 			}
 
-			out.println("<b>Part 3:</b><br>")
+			out.println("<b>Part 3:</b><br>");
 			out.println("<a href=\"/csc370p1/planes\">Insert Planes</a><br>");
 			out.println("<a href=\"/csc370p1/airlines\">Insert Airlines</a><br>");
 			out.println("<a href=\"/csc370p1/flights\">Insert Flights</a><br>");
@@ -40,14 +40,12 @@ public class TestServlet extends HttpServlet{
 			//out.println("<a href=\"/csc370p1/arrivals\">Insert Arrivals</a><br>");
 			//out.println("<a href=\"/csc370p1/departures\">Insert Departures</a><br>");
 			out.println("<a href=\"/csc370p1/registrations\">Passenger Registration</a><br>");
+			out.println("<b>Part 4:</b><br>");
 			out.println("<a href=\"/csc370p1/getbags\">Get Bags</a><br>");
-<<<<<<< HEAD
+			out.println("<a href=\"/csc370p1/flightstofrom\">Find Flights by location</a><br>");
+			out.println("<a href=\"/csc370p1/airlineflights\">Find Flights by airline</a><br>");
+			out.println("<a href=\"/csc370p1/timeflights\">Find Flights by time</a><br>");
 
-			out.println("<b>Part 4:</b><br>")
-			out.println("<a href=\"/csc370p1/flightstofrom\">Find Flights</a><br>");
-
-=======
->>>>>>> ce8643e2dfa014f4444eefa64083a790f074925a
 
 
 			out.println("</body>");

@@ -148,4 +148,26 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 		<url-pattern>/flightstofrom</url-pattern>
 	</servlet-mapping>
 
+	<!-- flights given airline-->
+	<servlet>
+		<servlet-name>Airline Flights</servlet-name>
+		<servlet-class>AirlineFlights</servlet-class>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>Airline Flights</servlet-name>
+		<url-pattern>/airlineflights</url-pattern>
+	</servlet-mapping>
+
+	<!-- flights given time-->
+	<servlet>
+		<servlet-name>Flights By Time</servlet-name>
+		<servlet-class>FlightsByTime</servlet-class>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>Flights By Time</servlet-name>
+		<url-pattern>/timeflights</url-pattern>
+	</servlet-mapping>
+
 </web-app>
