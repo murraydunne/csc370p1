@@ -43,10 +43,10 @@ public class FlightsByTime extends HttpServlet{
 
 			if (time != null) {
 				int timeval = Integer.parseInt(time);
-				PreparedStatement stmt = conn.prepareStatement("SELECT f.num AS num, d.gate AS dgate, d.departing_date AS ddate, d.status AS dstatus, a.gate AS agate, a.arrival_date AS adate, a.status AS astatus " +
-						"FROM Flight f LEFT JOIN Departure d ON(f.num = d.fnum) LEFT JOIN Arrival a ON(f.num = a.fnum) " +
-						"WHERE (adate IS NOT NULL AND ABS(EXTRACT(HOUR FROM CAST(adate AS TIMESTAMP)) - ?) < 3)");
-						//"OR (d.date IS NOT NULL AND ABS(EXTRACT(HOUR FROM CAST(ddate AS TIMESTAMP)) - ?) < 3)");
+				PreparedStatement stmt = conn.prepareStatement("SELECT f.num AS num, a.gate AS agate, a.arrival_date AS adate, a.status AS astatus, d.gate AS dgate, d.departing_date AS ddate, d.status AS dstatus " +
+						"FROM Flight f LEFT JOIN Arrival a ON(f.num = a.fnum) LEFT JOIN Departure d ON(f.num = d.fnum) " +
+						"WHERE (a.arrival_date IS NOT NULL AND ABS(EXTRACT(HOUR FROM CAST(a.arrival_date AS TIMESTAMP)) - ?) <= 3) " +
+						"OR (d.departing_date IS NOT NULL AND ABS(EXTRACT(HOUR FROM CAST(d.departing_date AS TIMESTAMP)) - ?) <= 3)");
 				stmt.setInt(1,timeval);
 				stmt.setInt(2,timeval);
 				ResultSet rset = stmt.executeQuery();
@@ -69,14 +69,14 @@ public class FlightsByTime extends HttpServlet{
 							"<td>"+rset.getString("astatus")+"</td>");
 						out.println("</tr>");
 					} else {
-						out.println("<tr>");
-						out.print (
-							"<td>"+rset.getString("num")+"</td>" +
-							"<td>"+rset.getString("dgate")+"</td>" +
-							"<td>"+rset.getString("ddate")+"</td>" +
-							"<td>"+rset.getString("dstatus")+"</td>");
-						out.println("</tr>");
-					}
+					 	out.println("<tr>");
+					 	out.print (
+					 		"<td>"+rset.getString("num")+"</td>" +
+					 		"<td>"+rset.getString("dgate")+"</td>" +
+					 		"<td>"+rset.getString("ddate")+"</td>" +
+					 		"<td>"+rset.getString("dstatus")+"</td>");
+					 	out.println("</tr>");
+					 }
 					
 				}
 				out.println("</table>");

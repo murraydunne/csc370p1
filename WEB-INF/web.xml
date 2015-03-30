@@ -170,4 +170,15 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 		<url-pattern>/timeflights</url-pattern>
 	</servlet-mapping>
 
+	<!-- flights given time-->
+	<servlet>
+		<servlet-name>Get Passengers</servlet-name>
+		<servlet-class>GetPassengers</servlet-class>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>Get Passengers</servlet-name>
+		<url-pattern>/getpassengers</url-pattern>
+	</servlet-mapping>
+
 </web-app>

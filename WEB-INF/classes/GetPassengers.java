@@ -31,7 +31,7 @@ public class GetPassengers extends HttpServlet{
 						"<body><font size=\"4\">");
 
 			out.println(
-						"<form method=\"GET\" action=\"/csc370p1/passengerlist\" >");
+						"<form method=\"GET\" action=\"/csc370p1/getpassengers\" >");
 						out.println("</select><br>" +
 						"Select a Flight:" +
 						"<select name=\"fnum\">");

@@ -45,6 +45,7 @@ public class TestServlet extends HttpServlet{
 			out.println("<a href=\"/csc370p1/flightstofrom\">Find Flights by location</a><br>");
 			out.println("<a href=\"/csc370p1/airlineflights\">Find Flights by airline</a><br>");
 			out.println("<a href=\"/csc370p1/timeflights\">Find Flights by time</a><br>");
+			out.println("<a href=\"/csc370p1/getpassengers\">Find passengers by flight</a><br>");
 
 
 
